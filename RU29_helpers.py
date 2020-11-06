@@ -1,9 +1,14 @@
-def grid_glider():
+import numpy as np
+
+def grid_glider(dataset_id,
+               varz2d = ['potential_temperature', 'salinity', 'cdom', 'chlorophyll_a', 'beta_700nm'],
+                zgrid = np.arange(0,1000,5),
+               ):
     '''grid the glider data from RUCOOL Erddap. this needs work'''
     import xarray as xr
     import pandas as pd
     from erddapy import ERDDAP
-    import numpy as np
+    
     from scipy.signal import find_peaks
     from scipy import stats
     e = ERDDAP(
@@ -13,7 +18,7 @@ def grid_glider():
     )
 
     # get the science data:
-    e.dataset_id = 'ru29-20200908T1623-profile-sci-rt'
+    e.dataset_id = dataset_id
 
     # this connects to the data and load into an pandas dataframe
     ds = e.to_pandas()
@@ -39,11 +44,11 @@ def grid_glider():
     
     
     # this is your depth grid, you can set:
-    zgrd = np.arange(0,1000,5)
+    zgrd = zgrid
 
     # list of variables to grid in 2d:
     # you choose from the columns of the science data
-    dataz = ['potential_temperature', 'salinity', 'cdom', 'chlorophyll_a', 'beta_700nm']
+    dataz = varz2d
 
 
     # this is a dict to hold our gridded stuff
